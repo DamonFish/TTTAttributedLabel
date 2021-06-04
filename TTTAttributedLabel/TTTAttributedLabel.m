@@ -713,7 +713,10 @@ static inline CGSize CTFramesetterSuggestFrameSizeForAttributedStringWithConstra
     NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
     [textStorage addLayoutManager:layoutManager];
 
-    NSTextContainer *textContainer = [[NSTextContainer alloc] initWithSize:self.bounds.size];
+    CGSize containerSize = CGSizeMake(self.bounds.size.width, CGFLOAT_MAX);
+    NSTextContainer *textContainer = [[NSTextContainer alloc] initWithSize:containerSize];
+    textContainer.lineFragmentPadding = 0;
+    
     [layoutManager addTextContainer:textContainer];
 
     NSRange glyphRange;
@@ -1312,8 +1315,7 @@ afterInheritingLabelAttributesAndConfiguringWithBlock:(NSMutableAttributedString
             baseElement.boundingRect = self.bounds;
             baseElement.superview = self;
             baseElement.accessibilityTraits = [super accessibilityTraits];
-
-            [mutableAccessibilityItems addObject:baseElement];
+            [mutableAccessibilityItems insertObject:baseElement atIndex: 0];
 
             self.accessibilityElements = [NSArray arrayWithArray:mutableAccessibilityItems];
         }
